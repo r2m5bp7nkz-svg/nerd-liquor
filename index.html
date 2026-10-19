@@ -151,7 +151,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const linkify=s=>esc(s).replace(/https?:\/\/[^\s)]+/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\/(www\.)?/,'').split('/')[0]}</a>`);
 const ORDER=['Available now','Preorder / upcoming','Watching'];
 const STATUS_CLS={'Available now':'status-avail','Preorder / upcoming':'status-pre','Watching':'status-watch'};
-const ACCENT={'Game of Thrones':'#b23a2e','Star Trek':'#3f7fbf','Lord of the Rings':'#c9a227','Dungeons & Dragons':'#8a3b9e','Ghost in the Shell':'#3fa39a','Godzilla':'#5d8a4a','The Rocketeer':'#c87533'};
+const ACCENT={'Game of Thrones':'#b23a2e','Star Trek':'#3f7fbf','Lord of the Rings':'#c9a227','Dungeons & Dragons':'#8a3b9e','Ghost in the Shell':'#3fa39a','Godzilla':'#5d8a4a','The Rocketeer':'#c87533','Marvel':'#c62828'};
 const FILTERS=[['franchise','Franchise'],['series','Series'],['status','Status'],['type_cat','Type'],['region','Region']];
 const state={q:'',franchise:new Set(),series:new Set(),status:new Set(),type_cat:new Set(),region:new Set()};
 let DATA;

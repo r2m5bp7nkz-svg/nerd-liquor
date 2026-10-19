@@ -14,7 +14,7 @@ updated = m.group(1) if m else ''
 SECTIONS = {'available now': 'Available now', 'preorder': 'Preorder / upcoming', 'watching': 'Watching'}
 FRANCHISES = [('GoT', 'Game of Thrones'), ('LOTR', 'Lord of the Rings'), ('Star Trek', 'Star Trek'),
               ('D&D', 'Dungeons & Dragons'), ('Ghost in the Shell', 'Ghost in the Shell'),
-              ('Godzilla', 'Godzilla'), ('Rocketeer', 'The Rocketeer')]
+              ('Godzilla', 'Godzilla'), ('Rocketeer', 'The Rocketeer'), ('Marvel', 'Marvel')]
 HOUSES = ['Stark', 'Lannister', 'Greyjoy', 'Targaryen', "Night's Watch", 'Baratheon', 'Tyrell', 'Tully']
 
 def franchise(name):
@@ -28,6 +28,7 @@ def type_cat(t):
     if 'bourbon' in l: return 'Bourbon'
     if 'rye' in l: return 'Rye'
     if 'brandy' in l: return 'Brandy'
+    if 'liqueur' in l: return 'Liqueur'
     if 'rum' in l: return 'Rum'
     if 'gin' in l.split(' ')[0] or l.startswith('gin'): return 'Gin'
     if 'vodka' in l: return 'Vodka'
