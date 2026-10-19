@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Nerd Liquor Library</title>
+<meta name="description" content="Licensed nerd-themed spirits: what you can order now, what's dropping, and whether the price is fair.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14100c;--bg2:#1c1611;--card:#221a13;--card2:#2a2018;--line:#3d2f22;
+  --ink:#eadfcd;--muted:#a8977f;--amber:#d9a441;--amber2:#f1c66b;--oxblood:#7a2a22;
+  --good:#6fae73;--ok:#c9b26a;--warn:#e0913f;--bad:#d9594c;--none:#8a8174;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;--sans:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:
+  radial-gradient(1200px 600px at 10% -10%,#3a2614 0,transparent 60%),
+  radial-gradient(900px 500px at 110% 0,#2b1a10 0,transparent 55%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 2px,transparent 2px 7px),var(--bg);
+  color:var(--ink);font:15px/1.5 var(--sans);min-height:100vh}
+a{color:var(--amber2);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding:38px 0 18px;border-bottom:1px solid var(--line);text-align:center}
+.crest{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--amber)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(34px,7vw,58px);line-height:1.05;margin:.2em 0 .15em;letter-spacing:.01em}
+h1 em{color:var(--amber2);font-style:italic}
+.sub{color:var(--muted);max-width:640px;margin:0 auto;font-size:14px}
+.updated{display:inline-block;margin-top:14px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted);background:rgba(0,0,0,.25)}
+.updated b{color:var(--ink);font-weight:600}
+.toolbar{position:sticky;top:0;z-index:5;background:rgba(20,16,12,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 0}
+.search{width:100%;padding:11px 14px 11px 38px;border-radius:10px;border:1px solid var(--line);background:#0f0c09 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a8977f' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l4 4'/%3E%3C/svg%3E") 12px 50% no-repeat;color:var(--ink);font:inherit;font-size:16px}
+.search:focus{outline:none;border-color:var(--amber)}
+.filters{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.frow{display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.frow::-webkit-scrollbar{display:none}
+.flabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);min-width:70px;flex:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--bg2);color:var(--ink);border-radius:999px;padding:5px 11px;font:500 13px var(--sans);cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#1a120a}
+.chip .n{opacity:.6;font-size:11px;margin-left:4px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--muted)}
+.reset{background:none;border:0;color:var(--amber2);font:inherit;cursor:pointer;padding:0}
+section.group{margin:30px 0}
+h2{font-family:var(--serif);font-size:30px;font-weight:600;margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+h2 .count{font:500 13px var(--sans);color:var(--muted)}
+.rule{height:1px;background:linear-gradient(90deg,var(--amber),transparent);opacity:.5;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{position:relative;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:14px;padding:16px 16px 12px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.03)}
+.card:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--accent,var(--amber))}
+.franchise{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.name{font-family:var(--serif);font-size:23px;font-weight:700;line-height:1.15;margin:0}
+.name a{color:var(--ink)}
+.name a:after{content:" ↗";font-size:.65em;color:var(--amber)}
+.new{font:600 10px var(--sans);letter-spacing:.1em;background:var(--oxblood);color:#f6d9d2;padding:2px 6px;border-radius:4px;vertical-align:middle;margin-left:6px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.price{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--amber2);line-height:1}
+.tag{font-size:12px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted)}
+.tag.status-avail{color:#bfe3c1;border-color:#3f6142;background:rgba(111,174,115,.12)}
+.tag.status-pre{color:#f3d79a;border-color:#6b5426;background:rgba(217,164,65,.12)}
+.tag.status-watch{color:#cfc6b8;border-color:#4b443b}
+.tag.house{color:#f0d7a0;border-color:#6a4b1e;background:rgba(122,42,34,.25)}
+.seller{font-size:13px;color:var(--muted)}
+.verdict{border-radius:10px;padding:8px 10px;background:rgba(0,0,0,.28);border:1px solid var(--line);font-size:13.5px}
+.vlabel{display:inline-block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-right:6px;color:#140f0a}
+.v-good{background:var(--good)}.v-ok{background:var(--ok)}.v-warn{background:var(--warn)}.v-bad{background:var(--bad)}.v-none{background:var(--none)}
+details{font-size:13px;color:var(--muted)}
+summary{cursor:pointer;color:var(--amber);list-style:none;font-size:12.5px}
+summary::-webkit-details-marker{display:none}
+summary:before{content:"▸ "}details[open] summary:before{content:"▾ "}
+details p{margin:6px 0;word-break:break-word}
+details b{color:var(--ink);font-weight:600}
+.empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+/* GoT checklist */
+.got{background:linear-gradient(180deg,#1d150f,#16110c);border:1px solid var(--line);border-radius:16px;padding:18px}
+.got p.intro{margin:0 0 14px;color:var(--muted);font-size:14px}
+.progress{height:8px;border-radius:99px;background:#0e0b08;border:1px solid var(--line);overflow:hidden;margin:4px 0 14px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--oxblood),var(--amber));width:0;transition:width .3s}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.22);cursor:pointer}
+.check input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;margin:2px 0 0;border:1.5px solid var(--amber);border-radius:5px;display:grid;place-content:center;cursor:pointer}
+.check input:checked{background:var(--amber)}
+.check input:checked:after{content:"✓";color:#1a120a;font-weight:700;font-size:14px}
+.check.owned{border-color:#6a4b1e;background:rgba(217,164,65,.08)}
+.check .h{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.1}
+.check .b{font-size:13px;color:var(--ink)}
+.check .s{font-size:12px;color:var(--muted)}
+.check.addon .h{color:#cfc6b8}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:22px 0 40px;color:var(--muted);font-size:12px;text-align:center}
+@media (max-width:520px){
+  body{font-size:14.5px}.grid{grid-template-columns:1fr}.name{font-size:21px}h2{font-size:26px}
+  header{padding-top:26px}.flabel{min-width:58px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="crest">❦ Licensed spirits · Private reserve ❦</div>
+    <h1>The Nerd <em>Liquor</em> Library</h1>
+    <p class="sub">Officially licensed fandom bottles you can order now, preorder, or keep an eye on, each with a price check against other reputable sellers.</p>
+    <span class="updated">Last updated <b id="updated">…</b></span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <input id="q" class="search" type="search" placeholder="Search bottles, sellers, houses, notes…" autocomplete="off" aria-label="Search">
+    <div class="filters" id="filters"></div>
+    <div class="meta"><span id="shown"></span><button class="reset" id="reset" hidden>Clear filters</button></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="groups"></div>
+
+  <section class="group" id="got-section">
+    <h2>Game of Thrones · 2018 House Collection <span class="count" id="gotcount"></span></h2>
+    <div class="rule"></div>
+    <div class="got">
+      <p class="intro">Diageo × HBO, released Nov 2018: eight house single malts plus two add-ons. Tick off the ones on your shelf (saved in this browser only). Each row links to the seller on the current list.</p>
+      <div class="progress"><i id="gotbar"></i></div>
+      <div class="checks" id="checks"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Prices and stock were checked by hand on the date above and can change at any time. Drink responsibly; shipping rules depend on your state or country.<br>Generated from <span id="src"></span>.</div></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const linkify=s=>esc(s).replace(/https?:\/\/[^\s)]+/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\/(www\.)?/,'').split('/')[0]}</a>`);
+const ORDER=['Available now','Preorder / upcoming','Watching'];
+const STATUS_CLS={'Available now':'status-avail','Preorder / upcoming':'status-pre','Watching':'status-watch'};
+const ACCENT={'Game of Thrones':'#b23a2e','Star Trek':'#3f7fbf','Lord of the Rings':'#c9a227','Dungeons & Dragons':'#8a3b9e','Ghost in the Shell':'#3fa39a','Godzilla':'#5d8a4a','The Rocketeer':'#c87533'};
+const FILTERS=[['franchise','Franchise'],['status','Status'],['type_cat','Type'],['region','Region']];
+const state={q:'',franchise:new Set(),status:new Set(),type_cat:new Set(),region:new Set()};
+let DATA;
+
+fetch('data.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{DATA=d;init()}).catch(e=>{$('#groups').innerHTML='<p class="empty">Could not load data.json</p>'});
+
+function init(){
+  $('#updated').textContent=DATA.updated; $('#src').textContent=DATA.source;
+  const f=$('#filters');
+  for(const [key,label] of FILTERS){
+    const vals=[...new Set(DATA.items.map(i=>i[key]))];
+    if(key==='status') vals.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)); else vals.sort();
+    const row=document.createElement('div'); row.className='frow';
+    row.innerHTML=`<span class="flabel">${label}</span>`+vals.map(v=>`<button class="chip" aria-pressed="false" data-k="${key}" data-v="${esc(v)}">${esc(v)}<span class="n">${DATA.items.filter(i=>i[key]===v).length}</span></button>`).join('');
+    f.appendChild(row);
+  }
+  f.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;const s=state[b.dataset.k],v=b.dataset.v;
+    s.has(v)?s.delete(v):s.add(v);b.setAttribute('aria-pressed',s.has(v));render()});
+  $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});
+  $('#reset').onclick=()=>{state.q='';$('#q').value='';for(const[k]of FILTERS)state[k].clear();document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));render()};
+  render(); renderGot();
+}
+
+function match(i){
+  for(const[k]of FILTERS) if(state[k].size&&!state[k].has(i[k]))return false;
+  if(!state.q) return true;
+  return state.q.split(/\s+/).every(t=>[i.name,i.franchise,i.type_full,i.seller,i.region,i.status,i.house,i.got_tag,i.notes,i.price_check,i.price].join(' ').toLowerCase().includes(t));
+}
+
+function card(i){
+  const name=i.url?`<a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)}</a>`:esc(i.name);
+  const house=i.house?`<span class="tag house">${i.house==='Add-on'?'GoT add-on':esc(i.house==="Night's Watch"?i.house:'House '+i.house)}</span>`:'';
+  return `<article class="card" style="--accent:${ACCENT[i.franchise]||'var(--amber)'}">
+    <div class="franchise">${esc(i.franchise)}</div>
+    <h3 class="name">${name}${i.new?'<span class="new">NEW</span>':''}</h3>
+    <div class="row"><span class="price">${esc(i.price)}</span></div>
+    <div class="row"><span class="tag ${STATUS_CLS[i.status]||''}">${esc(i.status)}</span><span class="tag">${esc(i.type)}</span>${house}</div>
+    <div class="seller">Seller: <b>${esc(i.seller)}</b> · ${i.region==='US'?'🇺🇸 US':'🌍 Non-US'}</div>
+    <div class="verdict"><span class="vlabel v-${i.verdict_class}">${esc(i.verdict_label)}</span>${esc(i.verdict.charAt(0).toUpperCase()+i.verdict.slice(1))}</div>
+    <details><summary>Price check &amp; notes</summary>
+      ${i.got_tag?`<p><b>Collection:</b> ${esc(i.got_tag)}</p>`:''}
+      ${i.type_full!==i.type?`<p><b>Type:</b> ${esc(i.type_full)}</p>`:''}
+      ${i.notes?`<p><b>Notes:</b> ${linkify(i.notes)}</p>`:''}
+      ${i.price_check?`<p><b>Price check:</b> ${linkify(i.price_check)}</p>`:''}
+    </details>
+  </article>`;
+}
+
+function render(){
+  const items=DATA.items.filter(match);
+  $('#groups').innerHTML=ORDER.map(s=>{const g=items.filter(i=>i.status===s);if(!g.length)return'';
+    return `<section class="group"><h2>${esc(s)} <span class="count">${g.length} bottle${g.length>1?'s':''}</span></h2><div class="rule"></div><div class="grid">${g.map(card).join('')}</div></section>`}).join('')
+    ||'<section class="group"><p class="empty">No bottles match. Try clearing a filter.</p></section>';
+  $('#shown').textContent=`Showing ${items.length} of ${DATA.items.length}`;
+  $('#reset').hidden=!(state.q||FILTERS.some(([k])=>state[k].size));
+}
+
+function renderGot(){
+  const KEY='nerdliquor-got-owned';let owned=JSON.parse(localStorage.getItem(KEY)||'{}');
+  const box=$('#checks');
+  const draw=()=>{
+    box.innerHTML=DATA.got_checklist.map((c,ix)=>{const id='g'+ix,k=c.bottle,on=!!owned[k];
+      const title=c.kind==='House'?(c.house==="Night's Watch"?"Night's Watch":'House '+c.house):'Add-on';
+      const where=c.listed?`On list: <a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.price)}</a>`:'Not on the current list';
+      return `<label class="check ${c.kind==='Add-on'?'addon':''} ${on?'owned':''}" for="${id}"><input type="checkbox" id="${id}" data-k="${esc(k)}" ${on?'checked':''}>
+        <div><div class="h">${esc(title)}</div><div class="b">${esc(c.bottle)}</div><div class="s">${where}</div></div></label>`}).join('');
+    const n=DATA.got_checklist.filter(c=>owned[c.bottle]).length,t=DATA.got_checklist.length;
+    $('#gotcount').textContent=`${n} / ${t} owned · ${DATA.got_checklist.filter(c=>c.listed).length} buyable now`;
+    $('#gotbar').style.width=(100*n/t)+'%';
+  };
+  box.addEventListener('change',e=>{const k=e.target.dataset.k;if(!k)return;e.target.checked?owned[k]=1:delete owned[k];localStorage.setItem(KEY,JSON.stringify(owned));draw()});
+  draw();
+}
+</script>
+</body>
+</html>
