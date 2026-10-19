@@ -34,6 +34,8 @@ h1 em{color:var(--amber2);font-style:italic}
 .toolbar{position:sticky;top:0;z-index:5;background:rgba(20,16,12,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 0}
 .search{width:100%;padding:11px 14px 11px 38px;border-radius:10px;border:1px solid var(--line);background:#0f0c09 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a8977f' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l4 4'/%3E%3C/svg%3E") 12px 50% no-repeat;color:var(--ink);font:inherit;font-size:16px}
 .search:focus{outline:none;border-color:var(--amber)}
+.theme{width:100%;margin-top:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0f0c09;color:var(--ink);font:inherit;font-size:16px}
+.theme:focus{outline:none;border-color:var(--amber)}
 .filters{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .frow{display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
 .frow::-webkit-scrollbar{display:none}
@@ -114,6 +116,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:22px 0 40px;colo
 <div class="toolbar">
   <div class="wrap">
     <input id="q" class="search" type="search" placeholder="Search bottles, sellers, houses, notes…" autocomplete="off" aria-label="Search">
+    <select id="theme" class="theme" aria-label="Theme"></select>
     <div class="filters" id="filters"></div>
     <div class="meta"><span id="shown"></span><button class="reset" id="reset" hidden>Clear filters</button></div>
   </div>
@@ -151,7 +154,11 @@ fetch('data.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{DATA=d;init()})
 function init(){
   $('#updated').textContent=DATA.updated; $('#src').textContent=DATA.source;
   const f=$('#filters');
+  const themes=[...new Set(DATA.items.map(i=>i.franchise))].sort((a,b)=>a.localeCompare(b));
+  $('#theme').innerHTML=`<option value="">All themes (${DATA.items.length})</option>`+themes.map(t=>`<option value="${esc(t)}">${esc(t)} (${DATA.items.filter(i=>i.franchise===t).length})</option>`).join('');
+  $('#theme').addEventListener('change',e=>{state.franchise.clear();if(e.target.value)state.franchise.add(e.target.value);render()});
   for(const [key,label] of FILTERS){
+    if(key==='franchise') continue;
     const vals=[...new Set(DATA.items.map(i=>i[key]))];
     if(key==='status') vals.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)); else vals.sort((a,b)=>(a.startsWith('None')-b.startsWith('None'))||a.localeCompare(b));
     const row=document.createElement('div'); row.className='frow';
@@ -161,7 +168,7 @@ function init(){
   f.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;const s=state[b.dataset.k],v=b.dataset.v;
     s.has(v)?s.delete(v):s.add(v);b.setAttribute('aria-pressed',s.has(v));render()});
   $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});
-  $('#reset').onclick=()=>{state.q='';$('#q').value='';for(const[k]of FILTERS)state[k].clear();document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));render()};
+  $('#reset').onclick=()=>{state.q='';$('#q').value='';for(const[k]of FILTERS)state[k].clear();$('#theme').value='';document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));render()};
   render(); renderGot();
 }
 
