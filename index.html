@@ -64,7 +64,7 @@ h2 .count{font:500 13px var(--sans);color:var(--muted)}
 .tag.status-pre{color:#f3d79a;border-color:#6b5426;background:rgba(217,164,65,.12)}
 .tag.status-watch{color:#cfc6b8;border-color:#4b443b}
 .tag.series{color:#f0d7a0;border-color:#6a4b1e;background:rgba(122,42,34,.25)}
-.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.prices{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .pcell{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:0}
 .pcell .pl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .pcell .pv{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--amber2);line-height:1.15;word-break:break-word}
@@ -191,9 +191,8 @@ function card(i){
   const low=i.price_lowest&&i.price_lowest!=='none';
   const lowStore=i.lowest_url?`<a href="${esc(i.lowest_url)}" target="_blank" rel="noopener">${esc(i.lowest_store)}</a>`:esc(i.lowest_store);
   const prices=`<div class="prices">
-      <div class="pcell"><div class="pl">This seller</div><div class="pv">${esc(i.price_current||i.price)}</div></div>
-      <div class="pcell msrp"><div class="pl">Retail (MSRP)</div><div class="pv ${msrpV==='unknown'?'na':''}">${esc(msrpV)}</div>${msrpS?`<div class="ps">${esc(msrpS)}</div>`:''}</div>
-      <div class="pcell"><div class="pl">Lowest found</div>${low?`<div class="pv">${esc(i.price_lowest)}</div><div class="ps">${lowStore}</div>`:'<div class="pv na">none found</div>'}</div>
+      <div class="pcell msrp"><div class="pl">Retail (official price)</div><div class="pv ${msrpV==='unknown'?'na':''}">${esc(msrpV)}</div>${msrpS?`<div class="ps">${esc(msrpS)}</div>`:''}</div>
+      <div class="pcell"><div class="pl">Current price</div><div class="pv">${esc(i.price_current||i.price)}</div><div class="ps">${esc(i.seller)}</div></div>
     </div>`;
   return `<article class="card" style="--accent:${ACCENT[i.franchise]||'var(--amber)'}">
     <div class="franchise">${esc(i.franchise)}</div>
@@ -201,8 +200,8 @@ function card(i){
     ${prices}
     <div class="row"><span class="tag ${STATUS_CLS[i.status]||''}">${esc(i.status)}</span><span class="tag">${esc(i.type)}</span>${series}</div>
     <div class="seller">Seller: <b>${esc(i.seller)}</b> · ${i.region==='US'?'🇺🇸 US':'🌍 Non-US'}</div>
-    <div class="verdict"><span class="vlabel v-${i.verdict_class}">${esc(i.verdict_label)}</span>${esc(i.verdict)}</div>
     <details><summary>Price check &amp; notes</summary>
+      ${i.verdict?`<p><b>Other sellers:</b> ${esc(i.verdict)}</p>`:''}
       
       ${i.type_full!==i.type?`<p><b>Type:</b> ${esc(i.type_full)}</p>`:''}
       ${i.notes?`<p><b>Notes:</b> ${linkify(i.notes)}</p>`:''}
