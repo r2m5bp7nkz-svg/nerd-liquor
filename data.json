@@ -4,7 +4,7 @@
  "items": [
   {
    "name": "LOTR Ringbearer Single Malt (Pokeno)",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Lord of the Rings",
    "type": "Single malt whisky (New Zealand)",
@@ -31,7 +31,7 @@
   },
   {
    "name": "GoT Kyro Whisky of Fire",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Rye whisky",
@@ -58,7 +58,7 @@
   },
   {
    "name": "GoT Kyro Whisky of Blood",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Rye whisky (Finnish malted rye)",
@@ -85,7 +85,7 @@
   },
   {
    "name": "GoT Johnnie Walker White Walker",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Blended Scotch whisky",
@@ -112,7 +112,7 @@
   },
   {
    "name": "GoT Mortlach 15 Six Kingdoms",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Speyside)",
@@ -139,7 +139,7 @@
   },
   {
    "name": "GoT Lagavulin 9 House Lannister",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Islay)",
@@ -166,7 +166,7 @@
   },
   {
    "name": "GoT Oban Night's Watch",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Highland)",
@@ -193,7 +193,7 @@
   },
   {
    "name": "GoT Singleton House Tully",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Speyside)",
@@ -220,7 +220,7 @@
   },
   {
    "name": "GoT Dalwhinnie Winter's Frost House Stark",
-   "new": true,
+   "new": "Oct 18",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Highland)",
@@ -247,7 +247,7 @@
   },
   {
    "name": "GoT Talisker Select Reserve House Greyjoy",
-   "new": true,
+   "new": "Oct 18",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Isle of Skye)",
@@ -274,7 +274,7 @@
   },
   {
    "name": "GoT Cardhu Gold Reserve House Targaryen",
-   "new": true,
+   "new": "Oct 18",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Speyside)",
@@ -301,7 +301,7 @@
   },
   {
    "name": "GoT Royal Lochnagar 12 House Baratheon",
-   "new": true,
+   "new": "Oct 18",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Highland)",
@@ -328,7 +328,7 @@
   },
   {
    "name": "GoT Clynelish Reserve House Tyrell",
-   "new": true,
+   "new": "Oct 18",
    "status": "Available now",
    "franchise": "Game of Thrones",
    "type": "Single malt Scotch (Highland, 51.2%)",
@@ -355,7 +355,7 @@
   },
   {
    "name": "Star Trek Alpha Quadrant Reserve Bourbon",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Bourbon whiskey",
@@ -382,7 +382,7 @@
   },
   {
    "name": "Star Trek Saurian Brandy 60th",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Brandy",
@@ -409,7 +409,7 @@
   },
   {
    "name": "Star Trek Saurian Brandy Roddenberry Bundle",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Brandy (gift bundle)",
@@ -436,7 +436,7 @@
   },
   {
    "name": "Star Trek Romulan Ale Blue Rye",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Rye whiskey",
@@ -463,7 +463,7 @@
   },
   {
    "name": "Star Trek Romulan Stellum Rye",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Rye whiskey (118 proof)",
@@ -490,7 +490,7 @@
   },
   {
    "name": "Star Trek Warp Core White Rum",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "White rum",
@@ -517,7 +517,7 @@
   },
   {
    "name": "Star Trek Earl Grey Gin",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Gin (Earl Grey-infused)",
@@ -544,7 +544,7 @@
   },
   {
    "name": "Star Trek Romulan Vodka",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "Star Trek",
    "type": "Vodka (blue, flavored)",
@@ -571,7 +571,7 @@
   },
   {
    "name": "Rocketeer American Whiskey (Hi-Rye or Wheated)",
-   "new": false,
+   "new": "",
    "status": "Available now",
    "franchise": "The Rocketeer",
    "type": "Bourbon whiskey",
@@ -598,7 +598,7 @@
   },
   {
    "name": "Star Trek Captain's Table 2.0 10yr Bourbon, Barrel #2084",
-   "new": false,
+   "new": "",
    "status": "Preorder / upcoming",
    "franchise": "Star Trek",
    "type": "Straight bourbon whiskey, 10 yr, 120.56 proof",
@@ -625,7 +625,7 @@
   },
   {
    "name": "Ghost in the Shell WHISKY MEW single malts",
-   "new": false,
+   "new": "",
    "status": "Preorder / upcoming",
    "franchise": "Ghost in the Shell",
    "type": "Single malt Scotch",
@@ -652,7 +652,7 @@
   },
   {
    "name": "LOTR Shadow and Flame Single Malt",
-   "new": false,
+   "new": "",
    "status": "Preorder / upcoming",
    "franchise": "Lord of the Rings",
    "type": "American single malt whiskey (straight)",
@@ -679,7 +679,7 @@
   },
   {
    "name": "LOTR Green Dragon Wheated Whiskey",
-   "new": false,
+   "new": "",
    "status": "Preorder / upcoming",
    "franchise": "Lord of the Rings",
    "type": "Wheated American whiskey",
@@ -706,7 +706,7 @@
   },
   {
    "name": "D&D Dragon's Milk Origin Mead Cask: Blue Dragon Edition (gift set)",
-   "new": false,
+   "new": "",
    "status": "Preorder / upcoming",
    "franchise": "Dungeons & Dragons",
    "type": "Bourbon Whiskey",
@@ -733,7 +733,7 @@
   },
   {
    "name": "Godzilla Minus One Kamiki (Shinra)",
-   "new": false,
+   "new": "",
    "status": "Watching",
    "franchise": "Godzilla",
    "type": "Blended malt whisky (Japan, cedar-cask)",
@@ -760,7 +760,7 @@
   },
   {
    "name": "LOTR Pepper Bourbon (Mossback)",
-   "new": false,
+   "new": "",
    "status": "Watching",
    "franchise": "Lord of the Rings",
    "type": "Bourbon whiskey",

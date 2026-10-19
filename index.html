@@ -185,7 +185,7 @@ function card(i){
     </div>`;
   return `<article class="card" style="--accent:${ACCENT[i.franchise]||'var(--amber)'}">
     <div class="franchise">${esc(i.franchise)}</div>
-    <h3 class="name">${name}${i.new?'<span class="new">NEW</span>':''}</h3>
+    <h3 class="name">${name}${i.new?`<span class="new">Added to list ${i.new}</span>`:''}</h3>
     ${prices}
     <div class="row"><span class="tag ${STATUS_CLS[i.status]||''}">${esc(i.status)}</span><span class="tag">${esc(i.type)}</span>${series}</div>
     <div class="seller">Seller: <b>${esc(i.seller)}</b> · ${i.region==='US'?'🇺🇸 US':'🌍 Non-US'}</div>

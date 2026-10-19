@@ -85,7 +85,7 @@ for line in md.splitlines():
     if len(short_type) > 45: short_type = re.sub(r'\s*\(.*\)', '', short_type).strip()
     if short_type.isupper(): short_type = short_type.title()
     items.append(dict(
-        name=re.sub(r'\s*\(NEW\)', '', name), new='(NEW)' in name, status=section,
+        name=re.sub(r'\s*\(ADDED [^)]*\)', '', name), new=(re.search(r'\(ADDED ([^)]*)\)', name).group(1) if re.search(r'\(ADDED ([^)]*)\)', name) else ''), status=section,
         franchise=franchise(name), type=short_type, type_full=full_type, type_cat=type_cat(ltype),
         price=price or '—', url=url, seller=host or 'n/a', region='Non-US' if non_us else 'US',
         got_tag=got, house=house, notes=' | '.join(notes), price_check=pc_text,
