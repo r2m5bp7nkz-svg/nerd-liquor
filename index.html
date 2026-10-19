@@ -80,6 +80,13 @@ summary::-webkit-details-marker{display:none}
 summary:before{content:"▸ "}details[open] summary:before{content:"▾ "}
 details p{margin:6px 0;word-break:break-word}
 details b{color:var(--ink);font-weight:600}
+.tgroup{margin:14px 0;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);border-left:4px solid var(--accent,var(--amber))}
+.tgroup>summary{padding:14px 16px;font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tgroup>summary:before{color:var(--amber)}
+.tgroup>summary .count{font:500 13px var(--sans);color:var(--muted)}
+.tgroup .tbody{padding:0 14px 16px}
+.tgroup .grid{margin-top:4px}
+.tactions{display:flex;gap:14px;margin:18px 0 0}
 .empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
 /* GoT checklist */
 .got{background:linear-gradient(180deg,#1d150f,#16110c);border:1px solid var(--line);border-radius:16px;padding:18px}
@@ -116,13 +123,13 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:22px 0 40px;colo
 <div class="toolbar">
   <div class="wrap">
     <input id="q" class="search" type="search" placeholder="Search bottles, sellers, houses, notes…" autocomplete="off" aria-label="Search">
-    <select id="theme" class="theme" aria-label="Theme"></select>
     <div class="filters" id="filters"></div>
     <div class="meta"><span id="shown"></span><button class="reset" id="reset" hidden>Clear filters</button></div>
   </div>
 </div>
 
 <main class="wrap">
+  <div class="tactions"><button class="reset" id="openall">Open all</button><button class="reset" id="closeall">Close all</button></div>
   <div id="groups"></div>
 
   <section class="group" id="got-section">
@@ -154,11 +161,7 @@ fetch('data.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{DATA=d;init()})
 function init(){
   $('#updated').textContent=DATA.updated; $('#src').textContent=DATA.source;
   const f=$('#filters');
-  const themes=[...new Set(DATA.items.map(i=>i.franchise))].sort((a,b)=>a.localeCompare(b));
-  $('#theme').innerHTML=`<option value="">All themes (${DATA.items.length})</option>`+themes.map(t=>`<option value="${esc(t)}">${esc(t)} (${DATA.items.filter(i=>i.franchise===t).length})</option>`).join('');
-  $('#theme').addEventListener('change',e=>{state.franchise.clear();if(e.target.value)state.franchise.add(e.target.value);render()});
   for(const [key,label] of FILTERS){
-    if(key==='franchise') continue;
     const vals=[...new Set(DATA.items.map(i=>i[key]))];
     if(key==='status') vals.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)); else vals.sort((a,b)=>(a.startsWith('None')-b.startsWith('None'))||a.localeCompare(b));
     const row=document.createElement('div'); row.className='frow';
@@ -168,7 +171,9 @@ function init(){
   f.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;const s=state[b.dataset.k],v=b.dataset.v;
     s.has(v)?s.delete(v):s.add(v);b.setAttribute('aria-pressed',s.has(v));render()});
   $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});
-  $('#reset').onclick=()=>{state.q='';$('#q').value='';for(const[k]of FILTERS)state[k].clear();$('#theme').value='';document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));render()};
+  $('#reset').onclick=()=>{state.q='';$('#q').value='';for(const[k]of FILTERS)state[k].clear();document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));render()};
+  $('#openall').onclick=()=>document.querySelectorAll('.tgroup').forEach(d=>d.open=true);
+  $('#closeall').onclick=()=>document.querySelectorAll('.tgroup').forEach(d=>d.open=false);
   render(); renderGot();
 }
 
@@ -206,13 +211,18 @@ function card(i){
   </article>`;
 }
 
+const OPEN=new Set();
 function render(){
   const items=DATA.items.filter(match);
-  $('#groups').innerHTML=ORDER.map(s=>{const g=items.filter(i=>i.status===s);if(!g.length)return'';
-    return `<section class="group"><h2>${esc(s)} <span class="count">${g.length} bottle${g.length>1?'s':''}</span></h2><div class="rule"></div><div class="grid">${g.map(card).join('')}</div></section>`}).join('')
+  const active=state.q||FILTERS.some(([k])=>state[k].size);
+  const themes=[...new Set(items.map(i=>i.franchise))].sort((a,b)=>items.filter(i=>i.franchise===b).length-items.filter(i=>i.franchise===a).length||a.localeCompare(b));
+  $('#groups').innerHTML=themes.map(t=>{const g=items.filter(i=>i.franchise===t).sort((a,b)=>ORDER.indexOf(a.status)-ORDER.indexOf(b.status));
+    const counts=ORDER.map(s=>[s,g.filter(i=>i.status===s).length]).filter(x=>x[1]).map(([s,n])=>`${n} ${s==='Available now'?'available':s==='Watching'?'watching':'preorder'}`).join(' · ');
+    return `<details class="tgroup" data-t="${esc(t)}" style="--accent:${ACCENT[t]||'var(--amber)'}" ${(active||OPEN.has(t))?'open':''}><summary>${esc(t)} <span class="count">${g.length} bottle${g.length>1?'s':''} · ${counts}</span></summary><div class="tbody"><div class="grid">${g.map(card).join('')}</div></div></details>`}).join('')
     ||'<section class="group"><p class="empty">No bottles match. Try clearing a filter.</p></section>';
+  document.querySelectorAll('.tgroup').forEach(d=>d.addEventListener('toggle',()=>{d.open?OPEN.add(d.dataset.t):OPEN.delete(d.dataset.t)}));
   $('#shown').textContent=`Showing ${items.length} of ${DATA.items.length}`;
-  $('#reset').hidden=!(state.q||FILTERS.some(([k])=>state[k].size));
+  $('#reset').hidden=!active;
 }
 
 function renderGot(){
