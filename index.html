@@ -61,10 +61,16 @@ h2 .count{font:500 13px var(--sans);color:var(--muted)}
 .tag.status-avail{color:#bfe3c1;border-color:#3f6142;background:rgba(111,174,115,.12)}
 .tag.status-pre{color:#f3d79a;border-color:#6b5426;background:rgba(217,164,65,.12)}
 .tag.status-watch{color:#cfc6b8;border-color:#4b443b}
-.tag.house{color:#f0d7a0;border-color:#6a4b1e;background:rgba(122,42,34,.25)}
+.tag.series{color:#f0d7a0;border-color:#6a4b1e;background:rgba(122,42,34,.25)}
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pcell{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:0}
+.pcell .pl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pcell .pv{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--amber2);line-height:1.15;word-break:break-word}
+.pcell .ps{font-size:11.5px;color:var(--muted);word-break:break-word}
+.pcell.msrp .pv{color:var(--ink)}.pcell .pv.na{color:var(--muted);font-size:15px}
 .seller{font-size:13px;color:var(--muted)}
 .verdict{border-radius:10px;padding:8px 10px;background:rgba(0,0,0,.28);border:1px solid var(--line);font-size:13.5px}
-.vlabel{display:inline-block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-right:6px;color:#140f0a}
+.vlabel{display:inline-block;vertical-align:1px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-right:6px;color:#140f0a}
 .v-good{background:var(--good)}.v-ok{background:var(--ok)}.v-warn{background:var(--warn)}.v-bad{background:var(--bad)}.v-none{background:var(--none)}
 details{font-size:13px;color:var(--muted)}
 summary{cursor:pointer;color:var(--amber);list-style:none;font-size:12.5px}
@@ -136,8 +142,8 @@ const linkify=s=>esc(s).replace(/https?:\/\/[^\s)]+/g,u=>`<a href="${u}" target=
 const ORDER=['Available now','Preorder / upcoming','Watching'];
 const STATUS_CLS={'Available now':'status-avail','Preorder / upcoming':'status-pre','Watching':'status-watch'};
 const ACCENT={'Game of Thrones':'#b23a2e','Star Trek':'#3f7fbf','Lord of the Rings':'#c9a227','Dungeons & Dragons':'#8a3b9e','Ghost in the Shell':'#3fa39a','Godzilla':'#5d8a4a','The Rocketeer':'#c87533'};
-const FILTERS=[['franchise','Franchise'],['status','Status'],['type_cat','Type'],['region','Region']];
-const state={q:'',franchise:new Set(),status:new Set(),type_cat:new Set(),region:new Set()};
+const FILTERS=[['franchise','Franchise'],['series','Series'],['status','Status'],['type_cat','Type'],['region','Region']];
+const state={q:'',franchise:new Set(),series:new Set(),status:new Set(),type_cat:new Set(),region:new Set()};
 let DATA;
 
 fetch('data.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{DATA=d;init()}).catch(e=>{$('#groups').innerHTML='<p class="empty">Could not load data.json</p>'});
@@ -147,7 +153,7 @@ function init(){
   const f=$('#filters');
   for(const [key,label] of FILTERS){
     const vals=[...new Set(DATA.items.map(i=>i[key]))];
-    if(key==='status') vals.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)); else vals.sort();
+    if(key==='status') vals.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)); else vals.sort((a,b)=>(a.startsWith('None')-b.startsWith('None'))||a.localeCompare(b));
     const row=document.createElement('div'); row.className='frow';
     row.innerHTML=`<span class="flabel">${label}</span>`+vals.map(v=>`<button class="chip" aria-pressed="false" data-k="${key}" data-v="${esc(v)}">${esc(v)}<span class="n">${DATA.items.filter(i=>i[key]===v).length}</span></button>`).join('');
     f.appendChild(row);
@@ -162,21 +168,30 @@ function init(){
 function match(i){
   for(const[k]of FILTERS) if(state[k].size&&!state[k].has(i[k]))return false;
   if(!state.q) return true;
-  return state.q.split(/\s+/).every(t=>[i.name,i.franchise,i.type_full,i.seller,i.region,i.status,i.house,i.got_tag,i.notes,i.price_check,i.price].join(' ').toLowerCase().includes(t));
+  return state.q.split(/\s+/).every(t=>[i.name,i.franchise,i.type_full,i.seller,i.region,i.status,i.house,i.got_tag,i.notes,i.price_check,i.price,i.series_full,i.lowest_store,i.verdict,i.verdict_label,i.price_msrp].join(' ').toLowerCase().includes(t));
 }
 
 function card(i){
   const name=i.url?`<a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)}</a>`:esc(i.name);
-  const house=i.house?`<span class="tag house">${i.house==='Add-on'?'GoT add-on':esc(i.house==="Night's Watch"?i.house:'House '+i.house)}</span>`:'';
+  const series=i.series_full?`<span class="tag series">Series: ${esc(i.series_full)}</span>`:'';
+  const msrpM=String(i.price_msrp||'unknown').match(/^(.*?)\s*\((.*)\)$/);
+  const msrpV=msrpM?msrpM[1]:(i.price_msrp||'unknown'), msrpS=msrpM?msrpM[2]:'';
+  const low=i.price_lowest&&i.price_lowest!=='none';
+  const lowStore=i.lowest_url?`<a href="${esc(i.lowest_url)}" target="_blank" rel="noopener">${esc(i.lowest_store)}</a>`:esc(i.lowest_store);
+  const prices=`<div class="prices">
+      <div class="pcell"><div class="pl">This seller</div><div class="pv">${esc(i.price_current||i.price)}</div></div>
+      <div class="pcell msrp"><div class="pl">Retail (MSRP)</div><div class="pv ${msrpV==='unknown'?'na':''}">${esc(msrpV)}</div>${msrpS?`<div class="ps">${esc(msrpS)}</div>`:''}</div>
+      <div class="pcell"><div class="pl">Lowest found</div>${low?`<div class="pv">${esc(i.price_lowest)}</div><div class="ps">${lowStore}</div>`:'<div class="pv na">none found</div>'}</div>
+    </div>`;
   return `<article class="card" style="--accent:${ACCENT[i.franchise]||'var(--amber)'}">
     <div class="franchise">${esc(i.franchise)}</div>
     <h3 class="name">${name}${i.new?'<span class="new">NEW</span>':''}</h3>
-    <div class="row"><span class="price">${esc(i.price)}</span></div>
-    <div class="row"><span class="tag ${STATUS_CLS[i.status]||''}">${esc(i.status)}</span><span class="tag">${esc(i.type)}</span>${house}</div>
+    ${prices}
+    <div class="row"><span class="tag ${STATUS_CLS[i.status]||''}">${esc(i.status)}</span><span class="tag">${esc(i.type)}</span>${series}</div>
     <div class="seller">Seller: <b>${esc(i.seller)}</b> · ${i.region==='US'?'🇺🇸 US':'🌍 Non-US'}</div>
-    <div class="verdict"><span class="vlabel v-${i.verdict_class}">${esc(i.verdict_label)}</span>${esc(i.verdict.charAt(0).toUpperCase()+i.verdict.slice(1))}</div>
+    <div class="verdict"><span class="vlabel v-${i.verdict_class}">${esc(i.verdict_label)}</span>${esc(i.verdict)}</div>
     <details><summary>Price check &amp; notes</summary>
-      ${i.got_tag?`<p><b>Collection:</b> ${esc(i.got_tag)}</p>`:''}
+      
       ${i.type_full!==i.type?`<p><b>Type:</b> ${esc(i.type_full)}</p>`:''}
       ${i.notes?`<p><b>Notes:</b> ${linkify(i.notes)}</p>`:''}
       ${i.price_check?`<p><b>Price check:</b> ${linkify(i.price_check)}</p>`:''}

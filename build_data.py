@@ -33,18 +33,11 @@ def type_cat(t):
     if 'vodka' in l: return 'Vodka'
     return 'Other whisky'
 
-def verdict_cat(v):
-    l = v.lower()
-    if 'well above' in l: return ('bad', 'Well above market')
-    if 'above market' in l or ' is above' in l: return ('warn', 'Above market')
-    if 'lowest found' in l or 'lowest verified' in l: return ('good', 'Lowest found')
-    if 'at msrp' in l: return ('ok', 'At MSRP')
-    if 'cheaper' in l or 'is the lowest' in l or 'bargain' in l: return ('warn', 'Cheaper elsewhere')
-    if ' over ' in l: return ('warn', 'Slightly above')
-    if 'at msrp' in l: return ('ok', 'At MSRP')
-    if 'near typical' in l or 'about typical' in l: return ('ok', 'Near typical')
-    if 'no comparison' in l or 'no reputable' in l or 'lottery-only' in l: return ('none', 'No comparison')
-    return ('ok', 'See notes')
+BADGES = {'best price': ('good', 'Best price'), 'cheaper elsewhere': ('warn', 'Cheaper elsewhere'),
+          'no comparison': ('none', 'No comparison')}
+
+def field(rest, key):
+    return next((re.sub(r'^' + key + r':\s*', '', p, flags=re.I) for p in rest if p.lower().startswith(key.lower() + ':')), '')
 
 items, section = [], None
 for line in md.splitlines():
@@ -66,11 +59,21 @@ for line in md.splitlines():
         if i > 0: price = rest[i - 1]
     else:
         price = next((p for p in rest if re.match(r'^([$£€—-]|GBP|JPY|NZ\$)', p)), '')
-    notes = [p for p in rest if p not in (pc, url, got, price)]
+    series_full = field(rest, 'Series')
+    msrp = field(rest, 'MSRP') or 'unknown'
+    lowest_raw = field(rest, 'Lowest found')
+    compare = field(rest, 'Compare')
+    special = {p for p in rest if re.match(r'^(Series|MSRP|Lowest found|Compare):', p, re.I)}
+    notes = [p for p in rest if p not in (pc, url, got, price) and p not in special]
+    lm = re.match(r'^(.*?)\s*@\s*(.*?)(?:\s*<(\S+)>)?$', lowest_raw)
+    price_lowest, lowest_store, lowest_url = (lm.group(1), lm.group(2), lm.group(3) or '') if lm else ('none', '', '')
+    cm = re.match(r'^(Best price|Cheaper elsewhere|No comparison)\s*-\s*(.*)$', compare, re.I)
+    if not cm: raise SystemExit(f'missing/invalid Compare field for: {name}')
+    vclass, vlabel = BADGES[cm.group(1).lower()]
+    verdict = cm.group(2).strip()
+    series = series_full.split(' - ')[0].strip() if series_full else ''
+
     pc_text = re.sub(r'^price check:\s*', '', pc, flags=re.I)
-    vm = re.search(r'Verdict:\s*(.*)$', pc_text)
-    verdict = vm.group(1).strip() if vm else pc_text
-    vclass, vlabel = verdict_cat(verdict)
     host = urlparse(url).hostname or '' if url else ''
     host = host.replace('www.', '')
     non_us = bool(re.search(r'\.(uk|jp|nz)$', host)) or host in ('kamikiwhisky.com',) \
@@ -86,7 +89,10 @@ for line in md.splitlines():
         franchise=franchise(name), type=short_type, type_full=full_type, type_cat=type_cat(ltype),
         price=price or '—', url=url, seller=host or 'n/a', region='Non-US' if non_us else 'US',
         got_tag=got, house=house, notes=' | '.join(notes), price_check=pc_text,
-        verdict=verdict, verdict_class=vclass, verdict_label=vlabel))
+        verdict=verdict, verdict_class=vclass, verdict_label=vlabel,
+        price_current=price or '—', price_msrp=msrp, price_lowest=price_lowest,
+        lowest_store=lowest_store, lowest_url=lowest_url,
+        series=series or 'None (standalone)', series_full=series_full))
 
 # GoT checklist
 checklist = []
