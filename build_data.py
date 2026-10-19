@@ -64,7 +64,8 @@ for line in md.splitlines():
     msrp = field(rest, 'MSRP') or 'unknown'
     lowest_raw = field(rest, 'Lowest found')
     compare = field(rest, 'Compare')
-    special = {p for p in rest if re.match(r'^(Series|MSRP|Lowest found|Compare):', p, re.I)}
+    size = field(rest, 'Size') or 'size unconfirmed'
+    special = {p for p in rest if re.match(r'^(Series|MSRP|Lowest found|Compare|Size):', p, re.I)}
     notes = [p for p in rest if p not in (pc, url, got, price) and p not in special]
     lm = re.match(r'^(.*?)\s*@\s*(.*?)(?:\s*<(\S+)>)?$', lowest_raw)
     price_lowest, lowest_store, lowest_url = (lm.group(1), lm.group(2), lm.group(3) or '') if lm else ('none', '', '')
@@ -92,7 +93,7 @@ for line in md.splitlines():
         got_tag=got, house=house, notes=' | '.join(notes), price_check=pc_text,
         verdict=verdict, verdict_class=vclass, verdict_label=vlabel,
         price_current=price or '—', price_msrp=msrp, price_lowest=price_lowest,
-        lowest_store=lowest_store, lowest_url=lowest_url,
+        size=size, lowest_store=lowest_store, lowest_url=lowest_url,
         series=series or 'None (standalone)', series_full=series_full))
 
 # GoT checklist
