@@ -14,7 +14,7 @@ updated = m.group(1) if m else ''
 SECTIONS = {'available now': 'Available now', 'preorder': 'Preorder / upcoming', 'watching': 'Watching'}
 FRANCHISES = [('GoT', 'Game of Thrones'), ('LOTR', 'Lord of the Rings'), ('Star Trek', 'Star Trek'),
               ('D&D', 'Dungeons & Dragons'), ('Ghost in the Shell', 'Ghost in the Shell'),
-              ('Godzilla', 'Godzilla'), ('Rocketeer', 'The Rocketeer'), ('Marvel', 'Marvel')]
+              ('Godzilla', 'Godzilla'), ('Rocketeer', 'The Rocketeer'), ('Marvel', 'Marvel'), ('Ultraman', 'Ultraman')]
 HOUSES = ['Stark', 'Lannister', 'Greyjoy', 'Targaryen', "Night's Watch", 'Baratheon', 'Tyrell', 'Tully']
 
 def franchise(name):
