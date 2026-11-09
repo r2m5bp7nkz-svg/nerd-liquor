@@ -1,5 +1,5 @@
 {
- "updated": "Nov 5, 2026",
+ "updated": "Nov 9, 2026",
  "source": "nerd-liquor-master-list.md",
  "items": [
   {
@@ -150,7 +150,7 @@
    "type": "Single malt Scotch (Islay)",
    "type_full": "Single malt Scotch (Islay)",
    "type_cat": "Scotch",
-   "price": "$90.99-$240.99 by state",
+   "price": "$111.99 (only variant in stock Nov 9; earlier $90.99-$240.99 by state)",
    "url": "https://flaviar.com/products/game-of-thrones-house-lannister-lagavulin-9-year-old-750",
    "seller": "flaviar.com",
    "region": "US",
@@ -161,7 +161,7 @@
    "verdict": "Cheapest elsewhere: $71.99 at K&W Liquors, NY (ships within NY only); this listing starts $19 more.",
    "verdict_class": "warn",
    "verdict_label": "Cheaper elsewhere",
-   "price_current": "$90.99-$240.99 by state",
+   "price_current": "$111.99 (only variant in stock Nov 9; earlier $90.99-$240.99 by state)",
    "price_msrp": "$64.99 (2018 US SRP)",
    "price_lowest": "$71.99",
    "size": "750ml · 46% ABV",
@@ -943,7 +943,7 @@
    "bottle": "Lagavulin 9",
    "listed": true,
    "item": "GoT Lagavulin 9 House Lannister",
-   "price": "$90.99-$240.99 by state",
+   "price": "$111.99 (only variant in stock Nov 9; earlier $90.99-$240.99 by state)",
    "url": "https://flaviar.com/products/game-of-thrones-house-lannister-lagavulin-9-year-old-750"
   },
   {
